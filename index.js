@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-mongoose.connect(`mongodb://localhost:27017/userData`, {
+mongoose.connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
