@@ -1,24 +1,39 @@
 require("dotenv").config()
 const express = require("express");
-const cors = require("cors");
-const { default: mongoose } = require("mongoose");
-
 const app = express();
-app.use(cors())
-app.use(express.json());
+const cors = require("cors");
+const mongoose = require("mongoose")
 
-mongoose.connect(`${process.env.DB_URL}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+app.use(express.json())
+
+const userRoutes = require("./routes/userRoutes");
+
+
+// app.use((req, res, next) => {
+//     console.log("HTTP Method - " + req.method + ", URL -" + req.url);
+//     next();
+// })
+
+app.use("/user", userRoutes)
+
+
+
 
 app.get("/", (req, res) => {
-    res.send("server is running properly")
+    res.send("Server is running properly")
 })
 
-const routes = require("./routes/mainRoute")
-app.use("/api", routes)
+// mongoose.connect(`${process.env.DB_URL}`, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// })
+
+mongoose.connect(`${process.env.DB_URL}`)
+    .then(() => {
+        console.log("Mongoose Connected Successfully");
+    })
+    .catch((error) => { console.log(error); })
 
 app.listen(5000, () => {
-    console.log("Server is running on PORT-5000");
+    console.log("Server is running on port: 5000");
 })
